@@ -191,5 +191,14 @@ public class Lid implements Serializable {
 		}
 		return date;
 	}
+	
+	public void setNaam() {
+		if (tussenvoegsels.equals("")) {
+        	naam = roepnaam + " " + achternaam; 
+        }
+        else {
+        	naam = roepnaam + " " + tussenvoegsels + " " + achternaam; 
+        }
+	}
 
 }

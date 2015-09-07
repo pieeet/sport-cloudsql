@@ -156,6 +156,7 @@ public class MySqlIO implements IoMethodenInterface {
             lid.setRoepnaam(rs.getString("roepnaam"));
             lid.setTussenvoegsels(rs.getString("tussenvoegsels"));
             lid.setAchternaam(rs.getString("achternaam"));
+            lid.setNaam();
             lid.setAdres(rs.getString("adres"));
             lid.setPostcode(rs.getString("postcode"));
             lid.setWoonplaats(rs.getString("woonplaats"));
@@ -185,6 +186,7 @@ public class MySqlIO implements IoMethodenInterface {
                 lid.setRoepnaam(rs.getString("roepnaam"));
                 lid.setTussenvoegsels(rs.getString("tussenvoegsels"));
                 lid.setAchternaam(rs.getString("achternaam"));
+                lid.setNaam();
                 lid.setAdres(rs.getString("adres"));
                 lid.setPostcode(rs.getString("postcode"));
                 lid.setWoonplaats(rs.getString("woonplaats"));
