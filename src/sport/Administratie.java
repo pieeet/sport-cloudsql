@@ -8,7 +8,7 @@ import java.util.Comparator;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
-import sportIO.DatastoreIO;
+//import sportIO.DatastoreIO;
 import sportIO.IoMethodenInterface;
 import sportIO.MySqlIO;
 
@@ -29,7 +29,7 @@ public class Administratie implements Serializable, IoMethodenInterface {
 		io = new MySqlIO();
 		cache = MemcacheServiceFactory.getMemcacheService();
 		leden = (ArrayList<Lid>) cache.get("leden");
-		if (leden == null) {
+		if (leden == null || leden.isEmpty()) {
 			leden = io.getLeden();
 			cache.put("leden", leden);
 		}
@@ -39,7 +39,7 @@ public class Administratie implements Serializable, IoMethodenInterface {
 		}
 			
 		teams = (ArrayList<Team>) cache.get("teams");
-		if (teams == null) {
+		if (teams == null || teams.isEmpty()) {
 			teams = io.getTeams();
 			cache.put("teams", teams);
 		}
@@ -49,7 +49,7 @@ public class Administratie implements Serializable, IoMethodenInterface {
 		}
 		
 		teamspelers = (ArrayList<TeamSpeler>) cache.get("teamspelers");
-		if (teamspelers == null) {
+		if (teamspelers == null || teamspelers.isEmpty()) {
 			teamspelers = io.getTeamspelers();
 			cache.put("teamspelers", teamspelers);
 		}

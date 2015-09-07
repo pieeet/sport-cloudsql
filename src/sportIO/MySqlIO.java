@@ -67,14 +67,14 @@ public class MySqlIO implements IoMethodenInterface {
 
 	@Override
 	public void voegLidToe(Lid lid) {
-		String preparedQuery = "INSERT INTO speler (spelersnr, spelerscode, roepnaam, " +
+		String preparedQuery = "INSERT INTO speler (spelerscode, spelersnr, roepnaam, " +
                 "tussenvoegsels, achternaam, adres, postcode, woonplaats, telefoon, geboortedatum) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
          try {
             maakConnectie();
             this.ps = dbc.prepareStatement(preparedQuery);
-            ps.setInt(1, lid.getNr());
-            ps.setString(2, lid.getSpelerscode());
+            ps.setString(1, lid.getSpelerscode());
+            ps.setInt(2, lid.getNr());
             ps.setString(3, lid.getRoepnaam());
             ps.setString(4, lid.getTussenvoegsels());
             ps.setString(5, lid.getAchternaam());
@@ -82,7 +82,8 @@ public class MySqlIO implements IoMethodenInterface {
             ps.setString(7, lid.getPostcode());
             ps.setString(8, lid.getWoonplaats());
             ps.setString(9, lid.getTelefoon());
-            ps.setString(10, lid.getGeboortedatum());
+            ps.setDate(10, java.sql.Date.valueOf(lid.getGeboortedatum()));
+            ps.executeUpdate();
             sluitAlles();
         } 
         catch (SQLException ex) {
@@ -224,6 +225,7 @@ public class MySqlIO implements IoMethodenInterface {
             this.ps = dbc.prepareStatement(preparedQuery);
             ps.setString(1, team.getTeamcode());
             ps.setString(2, lid.getSpelerscode());
+            ps.executeUpdate();
             sluitAlles();
         }
         catch(SQLException e) {
@@ -347,7 +349,6 @@ public class MySqlIO implements IoMethodenInterface {
         } catch (SQLException ex) {
         	ex.printStackTrace();
         }
-		
 	}
 
 	@Override
@@ -396,8 +397,4 @@ public class MySqlIO implements IoMethodenInterface {
         }
         return teamlijst;
 	}
-	
-	
-	
-
 }

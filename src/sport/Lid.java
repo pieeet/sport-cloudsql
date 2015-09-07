@@ -11,6 +11,7 @@ public class Lid implements Serializable {
 	private int nr;
 	private String spelerscode, roepnaam, tussenvoegsels, achternaam, naam,
 	        adres, postcode, woonplaats, telefoon, geboortedatum, geslacht;
+	private DateFormat sdf;
 	
 	public Lid() {
 		this.nr = 0;
@@ -46,7 +47,7 @@ public class Lid implements Serializable {
         
         
         //check op geldige datum
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setLenient(false);
         Date gebdat;
         try {
@@ -177,6 +178,18 @@ public class Lid implements Serializable {
 	
 	public void setGeslacht(String geslacht) {
 		this.geslacht = geslacht;
+	}
+	
+	
+	public Date getDate() {
+		Date date = null;
+		try {
+			date = sdf.parse(geboortedatum);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
 	}
 
 }
