@@ -13,113 +13,121 @@ import sport.Administratie;
 import sport.Lid;
 import sport.Team;
 
-
-
 @SuppressWarnings("serial")
 public class SportServlet extends HttpServlet {
 	private Administratie admin;
-		
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		admin = new Administratie();
-		
-		//voeg een nieuw lid toe
+
+		// voeg een nieuw lid toe
 		if (req.getParameter("knop_nieuw_lid") != null) {
 			this.voegNieuwLidToe(req);
 			resp.sendRedirect("/sport");
 		}
-		//verwijder een lid. Param verwijder_lid = definitief
-		else if (req.getParameter("verwijder_lid") != null || req.getParameter("lid_verwijder") != null) {
+		// verwijder een lid. Param verwijder_lid = definitief
+		else if (req.getParameter("verwijder_lid") != null
+				|| req.getParameter("lid_verwijder") != null) {
 			this.verwijderLid(req, resp);
 		}
-		//wijzig lid. Param wijzig_lid = definitief
-		else if (req.getParameter("wijzig_lid") != null || req.getParameter("lid_wijzig") != null) {
+		// wijzig lid. Param wijzig_lid = definitief
+		else if (req.getParameter("wijzig_lid") != null
+				|| req.getParameter("lid_wijzig") != null) {
 			this.wijzigLid(req, resp);
 		}
-		//voeg nieuw team toe
+		// voeg nieuw team toe
 		else if (req.getParameter("nieuw_team") != null) {
 			this.voegNieuwTeamToe(req, resp);
 		}
-		//verwijder team Param verwijder_team = definitief
-		else if (req.getParameter("team_verwijder") != null || req.getParameter("verwijder_team") != null) {
+		// verwijder team Param verwijder_team = definitief
+		else if (req.getParameter("team_verwijder") != null
+				|| req.getParameter("verwijder_team") != null) {
 			this.verwijderTeam(req, resp);
 		}
-		//wijzig team Param wijzig_team = def
-		else if (req.getParameter("team_wijzig") != null || req.getParameter("wijzig_team") != null) {
+		// wijzig team Param wijzig_team = def
+		else if (req.getParameter("team_wijzig") != null
+				|| req.getParameter("wijzig_team") != null) {
 			this.wijzigTeam(req, resp);
 		}
-		//geef de teams van een bepaald lid
+		// geef de teams van een bepaald lid
 		else if (req.getParameter("teams_van_lid") != null) {
 			this.getTeamsVanLid(req, resp);
 		}
-		//geef de leden van een team
+		// geef de leden van een team
 		else if (req.getParameter("leden_van_team") != null) {
 			this.getLedenVanTeam(req, resp);
 		}
-		//verwijder een teamspeler
+		// verwijder een teamspeler
 		else if (req.getParameter("verwijder_teamspeler") != null) {
 			this.verwijderTeamspeler(req, resp);
 		}
-		//voeg een teamspeler toe
+		// voeg een teamspeler toe
 		else if (req.getParameter("voeg_teamspeler_toe") != null) {
 			this.voegTeamspelerToe(req, resp);
 		}
-		
-		//geen params, ga naar overzicht leden en teams pagina
+
+		// geen params, ga naar overzicht leden en teams pagina
 		else {
 			req.setAttribute("admin", admin);
-			RequestDispatcher disp = req.getRequestDispatcher("/ledenTeams.jsp");
+			RequestDispatcher disp = req
+					.getRequestDispatcher("/ledenTeams.jsp");
 			disp.forward(req, resp);
 		}
 	}
 
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		doGet(req, resp);
 	}
-	
+
 	/******************************************************************************
-	 					hulpmethoden
+	 * hulpmethoden
 	 *****************************************************************************/
-	
+
 	private void voegNieuwLidToe(HttpServletRequest req) throws IOException {
-         String roepnaam = req.getParameter("roepnaam");
-         String tussenvoegsels = req.getParameter("tussenvoegsels");
-         String achternaam = req.getParameter("achternaam");
-         String adres = req.getParameter("adres");
-         String postcode = req.getParameter("postcode");
-         String woonplaats = req.getParameter("woonplaats");
-         String telefoon = req.getParameter("telefoon");
-         String gebDatum = req.getParameter("gebDatum");
-         String geslacht = req.getParameter("geslacht");
-         Lid lid = new Lid(roepnaam, tussenvoegsels, 
-             achternaam, adres, postcode, woonplaats, telefoon, gebDatum, geslacht);
-		 admin.voegLidToe(lid);
+		String roepnaam = req.getParameter("roepnaam");
+		String tussenvoegsels = req.getParameter("tussenvoegsels");
+		String achternaam = req.getParameter("achternaam");
+		String adres = req.getParameter("adres");
+		String postcode = req.getParameter("postcode");
+		String woonplaats = req.getParameter("woonplaats");
+		String telefoon = req.getParameter("telefoon");
+		String gebDatum = req.getParameter("gebDatum");
+		String geslacht = req.getParameter("geslacht");
+		Lid lid = new Lid(roepnaam, tussenvoegsels, achternaam, adres,
+				postcode, woonplaats, telefoon, gebDatum, geslacht);
+		admin.voegLidToe(lid);
 	}
-	
-	private void verwijderLid(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+	private void verwijderLid(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
 		String spelerscode = req.getParameter("spelerscode");
 		Lid lid = null;
 		lid = admin.getLid(spelerscode);
 
-		//ga naar bevestigingspagina
+		// ga naar bevestigingspagina
 		if (req.getParameter("lid_verwijder") != null) {
 			req.setAttribute("lid", lid);
-			RequestDispatcher disp = getServletContext().getRequestDispatcher("/verwijderlid.jsp");
+			RequestDispatcher disp = getServletContext().getRequestDispatcher(
+					"/verwijderlid.jsp");
 			disp.forward(req, resp);
 		}
-		
-		//verwijder lid definitief en terug naar overzicht
+
+		// verwijder lid definitief en terug naar overzicht
 		else if (req.getParameter("verwijder_lid") != null) {
-			 ArrayList<Team> teams = admin.getTeamsVanSpeler(lid);
-			for (Team team: teams) {
+			ArrayList<Team> teams = admin.getTeamsVanSpeler(lid);
+			for (Team team : teams) {
 				admin.verwijderTeamspeler(team, lid);
 			}
 			admin.verwijderLid(lid);
 			resp.sendRedirect("/sport");
 		}
 	}
-	
-	private void wijzigLid(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		//wijzig lid en ga terug naar overzicht
+
+	private void wijzigLid(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		// wijzig lid en ga terug naar overzicht
 		if (req.getParameter("wijzig_lid") != null) {
 			Lid lid = admin.getLid(req.getParameter("spelerscode"));
 			lid.setNr(lid.getNr());
@@ -135,7 +143,7 @@ public class SportServlet extends HttpServlet {
 			admin.wijzigLid(lid);
 			resp.sendRedirect("/sport");
 		}
-		//ga naar invoerscherm wijzigLid.jsp
+		// ga naar invoerscherm wijzigLid.jsp
 		else {
 			Lid lid = admin.getLid(req.getParameter("spelerscode"));
 			req.setAttribute("lid", lid);
@@ -143,63 +151,68 @@ public class SportServlet extends HttpServlet {
 			disp.forward(req, resp);
 		}
 	}
-	
-	private void voegNieuwTeamToe(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+	private void voegNieuwTeamToe(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
 		String teamcode = req.getParameter("teamcode");
 		String teamomschrijving = req.getParameter("teamomschrijving");
-		
+
 		Team team = new Team(teamcode, teamomschrijving);
 		admin.voegTeamToe(team);
-		
+
 		resp.sendRedirect("/sport");
 	}
-	
-	//verwijdert een team na bevestiging
-	private void verwijderTeam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+	// verwijdert een team na bevestiging
+	private void verwijderTeam(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		Team team = admin.getTeam(req.getParameter("teamcode"));
-		//leid naar bevestiging
+		// leid naar bevestiging
 		if (req.getParameter("team_verwijder") != null) {
 			req.setAttribute("team", team);
-			RequestDispatcher disp = req.getRequestDispatcher("/verwijderteam.jsp");
+			RequestDispatcher disp = req
+					.getRequestDispatcher("/verwijderteam.jsp");
 			try {
 				disp.forward(req, resp);
-			}
-			catch (ServletException e) {
+			} catch (ServletException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		//verwijder Team en terug naar overzicht
-		else if (req.getParameter("verwijder_team") != null){
+		// verwijder Team en terug naar overzicht
+		else if (req.getParameter("verwijder_team") != null) {
 			ArrayList<Lid> teamspelers = admin.getSpelersVanTeam(team);
-			for (Lid lid: teamspelers) {
+			for (Lid lid : teamspelers) {
 				admin.verwijderTeamspeler(team, lid);
 			}
 			admin.verwijderTeam(team);
 			resp.sendRedirect("/sport");
 		}
 	}
-	
-	private void wijzigTeam(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+	private void wijzigTeam(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
 		Team team = admin.getTeam(req.getParameter("teamcode"));
-		
-		//ga naar wijzigteam.jsp
+
+		// ga naar wijzigteam.jsp
 		if (req.getParameter("team_wijzig") != null) {
 			req.setAttribute("team", team);
-			RequestDispatcher disp = req.getRequestDispatcher("/wijzigteam.jsp");
+			RequestDispatcher disp = req
+					.getRequestDispatcher("/wijzigteam.jsp");
 			disp.forward(req, resp);
 		}
-		
-		//wijzig team en ga terug naar overzicht
+
+		// wijzig team en ga terug naar overzicht
 		else {
 			team.setOmschrijving(req.getParameter("teamomschrijving"));
 			admin.wijzigTeam(team);
 			resp.sendRedirect("/sport");
 		}
 	}
-	
-	//geeft overzicht van teams van speler
-	private void getTeamsVanLid(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+	// geeft overzicht van teams van speler
+	private void getTeamsVanLid(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
 		String spelerscode = req.getParameter("spelerscode");
 		Lid lid = admin.getLid(spelerscode);
 		ArrayList<Team> teamsLid = admin.getTeamsVanSpeler(lid);
@@ -213,35 +226,40 @@ public class SportServlet extends HttpServlet {
 		RequestDispatcher disp = req.getRequestDispatcher("/teamslid.jsp");
 		disp.forward(req, resp);
 	}
-	
-	
-	//geeft leden van een bepaald team
-	private void getLedenVanTeam(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+	// geeft leden van een bepaald team
+	private void getLedenVanTeam(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException, ServletException {
 		Team team = admin.getTeam(req.getParameter("teamcode"));
 		req.setAttribute("team", team);
 		ArrayList<Lid> teamleden = admin.getSpelersVanTeam(team);
 		req.setAttribute("teamleden", teamleden);
-		
-		//maak lijst van niet-teamleden
+
+		// maak lijst van niet-teamleden
 		ArrayList<Lid> nietTeamleden = admin.getNietTeamspelers(team);
 		req.setAttribute("niet_teamleden", nietTeamleden);
 		RequestDispatcher disp = req.getRequestDispatcher("/ledenvanteam.jsp");
 		disp.forward(req, resp);
 	}
-	
-	//voeg een speler toe aan een team in ledenvanteam.jsp.  Blijf in zelfde scherm
-	private void voegTeamspelerToe(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+	// voeg een speler toe aan een team in ledenvanteam.jsp. Blijf in zelfde
+	// scherm
+	private void voegTeamspelerToe(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException, ServletException {
 		Lid lid = admin.getLid(req.getParameter("spelerscode"));
 		Team team = admin.getTeam(req.getParameter("teamcode"));
 		admin.setTeamspeler(team, lid);
-		resp.sendRedirect("/sport?teamcode=" + team.getTeamcode() + "&leden_van_team=" );	
+		resp.sendRedirect("/sport?teamcode=" + team.getTeamcode()
+				+ "&leden_van_team=");
 	}
-	
-	//verwijder een speler uit een team Blijf in zelfde scherm
-	private void verwijderTeamspeler(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+	// verwijder een speler uit een team Blijf in zelfde scherm
+	private void verwijderTeamspeler(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException, ServletException {
 		Lid lid = admin.getLid(req.getParameter("spelerscode"));
 		Team team = admin.getTeam(req.getParameter("teamcode"));
 		admin.verwijderTeamspeler(team, lid);
-		resp.sendRedirect("/sport?teamcode=" + team.getTeamcode()+ "&leden_van_team=" );
+		resp.sendRedirect("/sport?teamcode=" + team.getTeamcode()
+				+ "&leden_van_team=");
 	}
 }
